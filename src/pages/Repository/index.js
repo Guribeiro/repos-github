@@ -101,7 +101,6 @@ export default function Repository({ match }) {
 					))}
 				</LanguagesList>
 			</Owner>
-
 			<IssuesList>
 				{issues.map(issue => (
 					<li key={String(issue.id)}>
