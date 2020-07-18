@@ -3,10 +3,16 @@ import api from '../../services/api';
 
 import { Link } from 'react-router-dom';
 
-import { FiArrowLeft } from 'react-icons/fi'
+import { FiArrowLeft, FiArrowLeftCircle, FiArrowRightCircle } from 'react-icons/fi'
 
 import Container from '../../components/Container';
-import { Owner, Loading, LanguagesList, IssuesList } from './styles';
+import {
+	Owner,
+	Loading,
+	LanguagesList,
+	IssuesList,
+	Pagination,
+} from './styles';
 
 export default function Repository({ match }) {
 
@@ -14,6 +20,7 @@ export default function Repository({ match }) {
 	const [issues, setIssues] = useState([]);
 	const [languages, setLanguages] = useState({});
 	const [loading, setLoading] = useState(true)
+	const [page, setPage] = useState(1);
 
 	useEffect(() => {
 
@@ -41,6 +48,32 @@ export default function Repository({ match }) {
 		handleRequests();
 
 	}, [match.params.repository])
+
+
+	useEffect(() => {
+
+		async function paginationLoad() {
+
+			const repoName = decodeURIComponent(match.params.repository);
+
+			const response = await api.get(`repos/${repoName}/issues`, {
+				params: {
+					state: 'open',
+					page,
+					per_page: 5
+				}
+			})
+
+			setIssues(response.data)
+		}
+
+		paginationLoad();
+
+	}, [match.params.repository, page])
+
+	function handlePage(action) {
+		setPage(action === 'back' ? page - 1 : page + 1);
+	}
 
 
 	if (loading) {
@@ -84,6 +117,16 @@ export default function Repository({ match }) {
 					</li>
 				))}
 			</IssuesList>
+
+			<Pagination>
+				<button onClick={() => handlePage('back')} disabled={page < 2} >
+					<FiArrowLeftCircle />
+				</button>
+				<span>Page: {page}</span>
+				<button onClick={() => handlePage('next')}>
+					<FiArrowRightCircle />
+				</button>
+			</Pagination>
 		</Container>
 	)
 }

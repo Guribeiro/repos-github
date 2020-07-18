@@ -137,3 +137,34 @@ export const IssuesList = styled.ul`
 	}
 
 `;
+
+export const Pagination = styled.section`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 20px;
+
+	button{
+		border-radius: 50%;
+		padding: 2px;
+
+		&:disabled{
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+		svg{
+			color: #6159c1;
+			font-size: 26px;
+		}
+	}
+
+	span{
+		font-size: 12px;
+		color: #555;
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+	}
+`;
